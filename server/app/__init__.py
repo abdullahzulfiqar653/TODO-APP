@@ -1,3 +1,6 @@
+"""This file make app of Flask whenever flask run command runs"""
+
+
 from flask import Flask
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
@@ -10,5 +13,3 @@ db = SQLAlchemy(app)
 app.app_context().push()
 
 api = Api(app)
-
-from app import routes

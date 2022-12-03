@@ -1,3 +1,5 @@
+"""Contain routes to all imported views"""
+
 from app import api
 from .views import TaskView, RetrieveTaskView
 

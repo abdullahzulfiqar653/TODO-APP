@@ -1,0 +1,5 @@
+{
+  "python.linting.enabled": true,
+  "python.autoComplete.extraPaths": ["./server"]
+}
+
