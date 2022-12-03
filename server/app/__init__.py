@@ -11,5 +11,4 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 app.app_context().push()
-
-api = Api(app)
+from .routes import api
