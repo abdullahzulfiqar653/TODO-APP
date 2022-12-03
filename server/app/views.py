@@ -10,8 +10,9 @@ from .models import Task
 
 @auth.verify_password
 def verify_password(username, password):
-    with open('sample_users.json', 'r') as f:
-        data = json.load(f)
+    "reading users and then with arguments verfying user"
+    with open('sample_users.json', 'r') as users:
+        data = json.load(users)
     return data.get(username) == password
 
 parser = reqparse.RequestParser()
