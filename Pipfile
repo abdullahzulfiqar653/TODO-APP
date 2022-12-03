@@ -10,6 +10,8 @@ pyyaml = "*"
 flask-sqlalchemy = "*"
 flask-api = "*"
 pylint = "*"
+pycryptodome = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
