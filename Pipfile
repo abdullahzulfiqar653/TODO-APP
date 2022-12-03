@@ -8,6 +8,7 @@ flask = "*"
 pymysql = "*"
 pyyaml = "*"
 flask-sqlalchemy = "*"
+flask-api = "*"
 
 [dev-packages]
 

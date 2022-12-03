@@ -1,7 +1,7 @@
 from app import app, db
 from .models import Task
 from flask import request, make_response, jsonify
-
+from flask_api import status
 
 @app.route('/tasks/create/', methods=['POST'])
 def create():
@@ -9,7 +9,7 @@ def create():
     new_task = Task(name=data['name'], description=data['description'])
     db.session.add(new_task)
     db.session.commit()
-    return make_response(jsonify({"id": new_task.id}), 201)
+    return make_response(jsonify({"id": new_task.id}), status.HTTP_201_CREATED)
 
 @app.route('/tasks/')
 def get():
@@ -22,4 +22,4 @@ def get():
         task_data['is_completed'] = task.is_completed
         all_tasks.append(task_data)
 
-    return make_response(jsonify(all_tasks), 200)
+    return make_response(jsonify(all_tasks), status.HTTP_200_OK)
