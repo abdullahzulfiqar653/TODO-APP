@@ -1,10 +1,18 @@
 """Module contain all the views"""
 
+import json
 from flask_api import status
 from flask_restful import  Resource, reqparse
 
-from app import db
+from app import db, auth
 from .models import Task
+
+
+@auth.verify_password
+def verify_password(username, password):
+    with open('sample_users.json', 'r') as f:
+        data = json.load(f)
+    return data.get(username) == password
 
 parser = reqparse.RequestParser()
 parser.add_argument('name')
@@ -17,6 +25,7 @@ class TaskView(Resource):
     This view contain 2 methods only. get to fetch all tasks and post to
     create a task in todo list.
     """
+    @auth.login_required
     def get(self):
         """fetching all the tasks from Task table"""
         all_tasks = []
@@ -28,6 +37,7 @@ class TaskView(Resource):
             all_tasks.append(task_data)
         return all_tasks, status.HTTP_200_OK
 
+    @auth.login_required
     def post(self):
         """creating a task"""
         args = parser.parse_args()
@@ -42,6 +52,7 @@ class RetrieveTaskView(Resource):
     This View has 3 methods. by sending task_id you can retrieve, delete or
     update an task.
     """
+    @auth.login_required
     def get(self, task_id):
         """Retrieving specific task by id"""
         task = Task.query.filter_by(id=task_id).first_or_404()
@@ -52,6 +63,7 @@ class RetrieveTaskView(Resource):
         task_data['is_completed'] = task.is_completed
         return task_data, status.HTTP_200_OK
 
+    @auth.login_required
     def delete(self, task_id):
         """deleting specific task by id"""
         Task.query.filter_by(id=task_id).first_or_404()
@@ -59,6 +71,7 @@ class RetrieveTaskView(Resource):
         db.session.commit()
         return '', status.HTTP_204_NO_CONTENT
 
+    @auth.login_required
     def patch(self, task_id):
         """updating specific task by id"""
         task = Task.query.filter_by(id=task_id).first_or_404()
