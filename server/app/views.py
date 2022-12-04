@@ -8,6 +8,9 @@ from app import db, auth
 from .models import Task
 from .utils import encrypt
 
+from main import env_variables
+key=env_variables['KEY']
+
 
 @auth.verify_password
 def verify_password(username, password):
@@ -37,7 +40,7 @@ class TaskView(Resource):
             task_data['name'] = task.name
             task_data['is_completed'] = task.is_completed
             all_tasks.append(task_data)
-        return encrypt(all_tasks), status.HTTP_200_OK
+        return encrypt(all_tasks, key), status.HTTP_200_OK
 
     @auth.login_required
     def post(self):
@@ -46,7 +49,7 @@ class TaskView(Resource):
         new_task = Task(name=args['name'], description=args['description'])
         db.session.add(new_task)
         db.session.commit()
-        return encrypt({'id': new_task.id}), status.HTTP_201_CREATED
+        return encrypt({'id': new_task.id}, key), status.HTTP_201_CREATED
 
 
 class RetrieveTaskView(Resource):
@@ -63,7 +66,7 @@ class RetrieveTaskView(Resource):
         task_data['name'] = task.name
         task_data['description'] = task.description
         task_data['is_completed'] = task.is_completed
-        return encrypt(task_data), status.HTTP_200_OK
+        return encrypt(task_data, key), status.HTTP_200_OK
 
     @auth.login_required
     def delete(self, task_id):
@@ -85,4 +88,4 @@ class RetrieveTaskView(Resource):
         task.description = description if description is not None else task.description
         task.is_completed = is_completed if is_completed is not None else task.is_completed
         db.session.commit()
-        return encrypt({'id': task.id}), 200
+        return encrypt({'id': task.id}, key), 200
